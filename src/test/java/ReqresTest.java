@@ -15,7 +15,6 @@ public class ReqresTest extends TestBase {
     given()
       .header("x-api-key", API_KEY)
       .log().all()
-
       .get("/users?page=2")
       .then()
       .log().all()
@@ -34,10 +33,8 @@ public class ReqresTest extends TestBase {
       .body(userData)
       .contentType(JSON)
       .log().uri()
-
       .when()
       .post("/user")
-
       .then()
       .log().all()
       .statusCode(201)
@@ -54,10 +51,8 @@ public class ReqresTest extends TestBase {
       .body(userData)
       .contentType(JSON)
       .log().uri()
-
       .when()
       .post("/user")
-
       .then()
       .log().body()
       .statusCode(400)
@@ -75,10 +70,8 @@ public class ReqresTest extends TestBase {
       .body(userData)
       .contentType(JSON)
       .log().uri()
-
       .when()
       .post("/register")
-
       .then()
       .log().all()
       .statusCode(200)
@@ -95,10 +88,8 @@ public class ReqresTest extends TestBase {
       .body(userData)
       .contentType(JSON)
       .log().uri()
-
       .when()
       .post("/register")
-
       .then()
       .log().all()
       .statusCode(400)
@@ -111,13 +102,46 @@ public class ReqresTest extends TestBase {
     given()
       .header("x-api-key", API_KEY)
       .log().all()
-
       .when()
       .delete("/users/2")
-
       .then()
       .log().all()
       .statusCode(204);
   }
+  @Test
+  @DisplayName("Обновление")
+  void successfulUpdateTest() {
+    String userData = "{\"name\": \"morpheus\",\n" +
+      "    \"job\": \"zion resident\"}";
+    given()
+      .header("x-api-key", API_KEY)
+      .body(userData)
+      .contentType(JSON)
+      .log().uri()
+      .when()
+      .put("/users/2")
+      .then()
+      .log().all()
+      .statusCode(200)
+      .body("job", is("zion resident"));
+  }
+  @Test
+  @DisplayName("Частичное обновление")
+  void successfulPartialUpdateTest() {
+    String userData = "{\"name\": \"morpheus\",\n" +
+      "    \"job\": \"zion resident\"}";
+    given()
+      .header("x-api-key", API_KEY)
+      .body(userData)
+      .contentType(JSON)
+      .log().uri()
+      .when()
+      .patch("/users/2")
+      .then()
+      .log().all()
+      .statusCode(200)
+      .body("job", is("zion resident"));
+  }
+
 }
 
